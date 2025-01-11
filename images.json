@@ -1,11 +1,11 @@
 [
     {
       "name": "image1",
-      "path": "./files/image1.jpg"
+      "path": "./image/image1.jpg"
     },
     {
       "name": "image2",
-      "path": "./files/index.png"
+      "path": "./image/index.png"
     }
   ]
   
