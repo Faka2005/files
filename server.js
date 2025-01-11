@@ -12,11 +12,31 @@ const filesDataImages = JSON.parse(fs.readFileSync('images.json', 'utf-8'));
 // Combiner les deux tableaux de fichiers en un seul pour faciliter la recherche
 const allFilesData = [...filesDataFiles, ...filesDataImages];
 
+app.get('/',(req,res)=>{
+    const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Api pour fichier</title>
+    </head>
+    <body>
+      <h1>Liste des Fichiers Disponibles</h1>
+      <ul>
+        <li><a href="/files">Fichier</a></li>
+        <li><a href="/images">Images</a></li>
+      </ul>
+    </body>
+    </html>
+  `;
+  res.send(html);
+    
+})
+
 // Endpoint pour générer une page HTML affichant la liste des fichiers
 app.get('/files', (req, res) => {
   // Générer un tableau HTML avec des liens
   const fileLinks = allFilesData
-    .map((file) => `<li><a href="/file/${file.name}">${file.name}</a></li>`)
+    .map((file) => `<li><a href="/files/${file.name}">${file.name}</a></li>`)
     .join('');
 
   const html = `
@@ -41,7 +61,7 @@ app.get('/files', (req, res) => {
 app.get('/images', (req, res) => {
   // Générer un tableau HTML avec des liens
   const imageLinks = filesDataImages
-    .map((image) => `<li><a href="/image/${image.name}">${image.name}</a></li>`)
+    .map((image) => `<li><a href="/images/${image.name}">${image.name}</a></li>`)
     .join('');
 
   const html = `
@@ -63,7 +83,7 @@ app.get('/images', (req, res) => {
 });
 
 // Endpoint pour récupérer le chemin d'un fichier via son nom
-app.get('/file/:name', (req, res) => {
+app.get('/files/:name', (req, res) => {
   const fileName = req.params.name;
 
   // Rechercher le fichier correspondant dans les données combinées
@@ -83,7 +103,7 @@ app.get('/file/:name', (req, res) => {
 });
 
 // Endpoint spécifique pour les images
-app.get('/image/:name', (req, res) => {
+app.get('/images/:name', (req, res) => {
   const imageName = req.params.name;
 
   // Rechercher uniquement dans les données d'images
