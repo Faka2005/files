@@ -12,6 +12,56 @@ const filesDataImages = JSON.parse(fs.readFileSync('images.json', 'utf-8'));
 // Combiner les deux tableaux de fichiers en un seul pour faciliter la recherche
 const allFilesData = [...filesDataFiles, ...filesDataImages];
 
+// Endpoint pour générer une page HTML affichant la liste des fichiers
+app.get('/files', (req, res) => {
+  // Générer un tableau HTML avec des liens
+  const fileLinks = allFilesData
+    .map((file) => `<li><a href="/file/${file.name}">${file.name}</a></li>`)
+    .join('');
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Liste des Fichiers</title>
+    </head>
+    <body>
+      <h1>Liste des Fichiers Disponibles</h1>
+      <ul>
+        ${fileLinks}
+      </ul>
+    </body>
+    </html>
+  `;
+
+  res.send(html);
+});
+
+// Endpoint pour générer une page HTML affichant la liste des images
+app.get('/images', (req, res) => {
+  // Générer un tableau HTML avec des liens
+  const imageLinks = filesDataImages
+    .map((image) => `<li><a href="/image/${image.name}">${image.name}</a></li>`)
+    .join('');
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Liste des Images</title>
+    </head>
+    <body>
+      <h1>Liste des Images Disponibles</h1>
+      <ul>
+        ${imageLinks}
+      </ul>
+    </body>
+    </html>
+  `;
+
+  res.send(html);
+});
+
 // Endpoint pour récupérer le chemin d'un fichier via son nom
 app.get('/file/:name', (req, res) => {
   const fileName = req.params.name;
@@ -50,16 +100,6 @@ app.get('/image/:name', (req, res) => {
   } else {
     res.status(404).json({ error: 'Image path does not exist' });
   }
-});
-
-// Endpoint de test pour voir tous les fichiers disponibles
-app.get('/files', (req, res) => {
-  res.json(allFilesData);
-});
-
-// Endpoint de test pour voir uniquement les images disponibles
-app.get('/images', (req, res) => {
-  res.json(filesDataImages);
 });
 
 // Démarrer le serveur
