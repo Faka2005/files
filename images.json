@@ -24,8 +24,16 @@
       "path": "./image//aop/sommateur.png"
     },
     {
+      "name":"soustracteur2",
+      "path": "./image//aop/soustracteur2.png"
+    },
+    {
       "name": "derivateur",
       "path": "./image//aop/derivateur.png"
+    },
+    {
+      "name": "integrateur",
+      "path": "./image//aop/integrateur.png"
     }
   ]
   
