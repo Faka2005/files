@@ -23,23 +23,26 @@ const allFilesData = [
 app.get('/', (req, res) => {
   const html = `
     <!DOCTYPE html>
-    <html>
+    <html lang="fr">
     <head>
-      <title>API pour Fichiers</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Message Spécial</title>
     </head>
     <body>
-      <h1>API pour Fichiers</h1>
-      <ul>
-        <li><a href="/files">Fichiers</a></li>
-        <li><a href="/images">Images</a></li>
-        <li><a href="/video">Vidéos</a></li>
-        <li><a href="/audio">Audios</a></li>
-      </ul>
+      <h1>Joyeux Anniversaire, ma meilleure amie !</h1>
+      <p>Chère amie, en ce jour spécial, je tiens à te dire à quel point tu es importante pour moi. Que cette nouvelle année t'apporte des moments de bonheur, de rires et de succès. Tu es une personne incroyable et je suis tellement reconnaissant(e) de t'avoir à mes côtés.</p>
+      
+      <h2>Et maintenant... une demande spéciale...</h2>
+      <p>Je voudrais te poser une question importante, une question qui me trotte dans la tête depuis un certain temps...</p>
+      <h3>Veux-tu m'épouser ?</h3>
+      <p>Je ne peux imaginer ma vie sans toi, et je souhaite passer le reste de mes jours à te rendre heureuse. Alors, ma meilleure amie et la personne la plus précieuse dans ma vie, accepteras-tu de partager ton avenir avec moi ?</p>
     </body>
     </html>
   `;
   res.send(html);
 });
+
 
 // Liste des fichiers
 app.get('/files', (req, res) => {
