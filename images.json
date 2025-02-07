@@ -1,39 +1,38 @@
 [
-    {
-      "name": "comparateur",
-      "path": "./image/aop/comparateur.png"
-    },
-    {
-      "name": "suiveur",
-      "path": "./image//aop/suiveur.png"
-    },
-    {
-      "name":"amplificateur_inverseur",
-      "path": "./image//aop/amplificateur_inverseur.png"
-    },
-    {
-      "name": "amplificateur_non_inverseur",
-      "path": "./image//aop/amplificateur_non_inverseur.png"
-    },
-    {
-      "name":"soustracteur",
-      "path": "./image//aop/soustracteur.png"
-    },
-    {
-      "name":"sommateur",
-      "path": "./image//aop/sommateur.png"
-    },
-    {
-      "name":"soustracteur2",
-      "path": "./image//aop/soustracteur2.png"
-    },
-    {
-      "name": "derivateur",
-      "path": "./image//aop/derivateur.png"
-    },
-    {
-      "name": "integrateur",
-      "path": "./image//aop/integrateur.png"
-    }
-  ]
-  
+  {
+    "name": "comparateur",
+    "path": "./image/aop/comparateur.png"
+  },
+  {
+    "name": "suiveur",
+    "path": "./image//aop/suiveur.png"
+  },
+  {
+    "name": "amplificateur_inverseur",
+    "path": "./image//aop/amplificateur_inverseur.png"
+  },
+  {
+    "name": "amplificateur_non_inverseur",
+    "path": "./image//aop/amplificateur_non_inverseur.png"
+  },
+  {
+    "name": "soustracteur",
+    "path": "./image//aop/soustracteur.png"
+  },
+  {
+    "name": "sommateur",
+    "path": "./image//aop/sommateur.png"
+  },
+  {
+    "name": "soustracteur2",
+    "path": "./image//aop/soustracteur2.png"
+  },
+  {
+    "name": "derivateur",
+    "path": "./image//aop/derivateur.png"
+  },
+  {
+    "name": "integrateur",
+    "path": "./image//aop/integrateur.png"
+  }
+]

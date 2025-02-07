@@ -8,34 +8,42 @@ const PORT = 3000;
 // Charger les fichiers JSON contenant les données
 const filesDataFiles = JSON.parse(fs.readFileSync('files.json', 'utf-8'));
 const filesDataImages = JSON.parse(fs.readFileSync('images.json', 'utf-8'));
+const filesDataVideo = JSON.parse(fs.readFileSync('video.json', 'utf-8'));
+const filesDataAudio = JSON.parse(fs.readFileSync('audio.json', 'utf-8')); // Charger les fichiers audio
 
-// Combiner les deux tableaux de fichiers en un seul pour faciliter la recherche
-const allFilesData = [...filesDataFiles, ...filesDataImages];
+// Combiner tous les fichiers pour les recherches générales
+const allFilesData = [
+  ...filesDataFiles,
+  ...filesDataImages,
+  ...filesDataVideo,
+  ...filesDataAudio,
+];
 
-app.get('/',(req,res)=>{
-    const html = `
+// Page principale
+app.get('/', (req, res) => {
+  const html = `
     <!DOCTYPE html>
     <html>
     <head>
-      <title>Api pour fichier</title>
+      <title>API pour Fichiers</title>
     </head>
     <body>
-      <h1>Liste des Fichiers Disponibles</h1>
+      <h1>API pour Fichiers</h1>
       <ul>
-        <li><a href="/files">Fichier</a></li>
+        <li><a href="/files">Fichiers</a></li>
         <li><a href="/images">Images</a></li>
+        <li><a href="/video">Vidéos</a></li>
+        <li><a href="/audio">Audios</a></li>
       </ul>
     </body>
     </html>
   `;
   res.send(html);
-    
-})
+});
 
-// Endpoint pour générer une page HTML affichant la liste des fichiers
+// Liste des fichiers
 app.get('/files', (req, res) => {
-  // Générer un tableau HTML avec des liens
-  const fileLinks = allFilesData
+  const fileLinks = filesDataFiles
     .map((file) => `<li><a href="/files/${file.name}">${file.name}</a></li>`)
     .join('');
 
@@ -53,13 +61,11 @@ app.get('/files', (req, res) => {
     </body>
     </html>
   `;
-
   res.send(html);
 });
 
-// Endpoint pour générer une page HTML affichant la liste des images
+// Liste des images
 app.get('/images', (req, res) => {
-  // Générer un tableau HTML avec des liens
   const imageLinks = filesDataImages
     .map((image) => `<li><a href="/images/${image.name}">${image.name}</a></li>`)
     .join('');
@@ -78,51 +84,141 @@ app.get('/images', (req, res) => {
     </body>
     </html>
   `;
-
   res.send(html);
 });
 
-// Endpoint pour récupérer le chemin d'un fichier via son nom
+// Liste des vidéos
+app.get('/video', (req, res) => {
+  const videoLinks = filesDataVideo
+    .map(
+      (video) =>
+        `<li>
+          <video controls width="300">
+            <source src="/video/${video.name}" type="video/mp4">
+            Votre navigateur ne supporte pas les vidéos HTML5.
+          </video>
+        </li>`
+    )
+    .join('');
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Liste des Vidéos</title>
+    </head>
+    <body>
+      <h1>Liste des Vidéos Disponibles</h1>
+      <ul>
+        ${videoLinks}
+      </ul>
+    </body>
+    </html>
+  `;
+  res.send(html);
+});
+
+// Liste des audios
+app.get('/audio', (req, res) => {
+  const audioLinks = filesDataAudio
+    .map(
+      (audio) =>
+        `<li>
+          <audio controls>
+            <source src="/audio/${audio.name}" type="audio/mpeg">
+            Votre navigateur ne supporte pas les audios HTML5.
+          </audio>
+          <p>${audio.name}</p>
+        </li>`
+    )
+    .join('');
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Liste des Audios</title>
+    </head>
+    <body>
+      <h1>Liste des Audios Disponibles</h1>
+      <ul>
+        ${audioLinks}
+      </ul>
+    </body>
+    </html>
+  `;
+  res.send(html);
+});
+
+// Détails d'un fichier
 app.get('/files/:name', (req, res) => {
   const fileName = req.params.name;
-
-  // Rechercher le fichier correspondant dans les données combinées
   const file = allFilesData.find((f) => f.name === fileName);
 
   if (!file) {
-    return res.status(404).json({ error: 'File not found' });
+    return res.status(404).json({ error: 'Fichier introuvable' });
   }
 
-  // Résoudre et envoyer le fichier si disponible
   const filePath = path.resolve(__dirname, file.path);
   if (fs.existsSync(filePath)) {
     res.sendFile(filePath);
   } else {
-    res.status(404).json({ error: 'File path does not exist' });
+    res.status(404).json({ error: "Le chemin du fichier n'existe pas" });
   }
 });
 
-// Endpoint spécifique pour les images
+// Détails d'une image
 app.get('/images/:name', (req, res) => {
   const imageName = req.params.name;
-
-  // Rechercher uniquement dans les données d'images
   const image = filesDataImages.find((img) => img.name === imageName);
 
   if (!image) {
-    return res.status(404).json({ error: 'Image not found' });
+    return res.status(404).json({ error: 'Image introuvable' });
   }
 
-  // Résoudre et envoyer l'image si disponible
   const imagePath = path.resolve(__dirname, image.path);
   if (fs.existsSync(imagePath)) {
     res.sendFile(imagePath);
   } else {
-    res.status(404).json({ error: 'Image path does not exist' });
+    res.status(404).json({ error: "Le chemin de l'image n'existe pas" });
+  }
+});
+
+// Détails d'une vidéo
+app.get('/video/:name', (req, res) => {
+  const videoName = req.params.name;
+  const video = filesDataVideo.find((v) => v.name === videoName);
+
+  if (!video) {
+    return res.status(404).json({ error: 'Vidéo introuvable' });
+  }
+
+  const videoPath = path.resolve(__dirname, video.path);
+  if (fs.existsSync(videoPath)) {
+    res.sendFile(videoPath);
+  } else {
+    res.status(404).json({ error: "Le chemin de la vidéo n'existe pas" });
+  }
+});
+
+// Détails d'un audio
+app.get('/audio/:name', (req, res) => {
+  const audioName = req.params.name;
+  const audio = filesDataAudio.find((a) => a.name === audioName);
+
+  if (!audio) {
+    return res.status(404).json({ error: 'Audio introuvable' });
+  }
+
+  const audioPath = path.resolve(__dirname, audio.path);
+  if (fs.existsSync(audioPath)) {
+    res.sendFile(audioPath);
+  } else {
+    res.status(404).json({ error: "Le chemin de l'audio n'existe pas" });
   }
 });
 
 // Démarrer le serveur
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Serveur en cours d'exécution sur http://localhost:${PORT}`);
 });
