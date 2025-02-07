@@ -8,15 +8,15 @@ const PORT = 3000;
 // Charger les fichiers JSON contenant les données
 const filesDataFiles = JSON.parse(fs.readFileSync('files.json', 'utf-8'));
 const filesDataImages = JSON.parse(fs.readFileSync('images.json', 'utf-8'));
-const filesDataVideo = JSON.parse(fs.readFileSync('video.json', 'utf-8'));
-const filesDataAudio = JSON.parse(fs.readFileSync('audio.json', 'utf-8')); // Charger les fichiers audio
+// const filesDataVideo = JSON.parse(fs.readFileSync('video.json', 'utf-8'));
+// const filesDataAudio = JSON.parse(fs.readFileSync('audio.json', 'utf-8')); // Charger les fichiers audio
 
 // Combiner tous les fichiers pour les recherches générales
 const allFilesData = [
   ...filesDataFiles,
   ...filesDataImages,
-  ...filesDataVideo,
-  ...filesDataAudio,
+  // ...filesDataVideo,
+  // ...filesDataAudio,
 ];
 
 // Page principale
@@ -87,68 +87,68 @@ app.get('/images', (req, res) => {
   res.send(html);
 });
 
-// Liste des vidéos
-app.get('/video', (req, res) => {
-  const videoLinks = filesDataVideo
-    .map(
-      (video) =>
-        `<li>
-          <video controls width="300">
-            <source src="/video/${video.name}" type="video/mp4">
-            Votre navigateur ne supporte pas les vidéos HTML5.
-          </video>
-        </li>`
-    )
-    .join('');
+// // Liste des vidéos
+// app.get('/video', (req, res) => {
+//   const videoLinks = filesDataVideo
+//     .map(
+//       (video) =>
+//         `<li>
+//           <video controls width="300">
+//             <source src="/video/${video.name}" type="video/mp4">
+//             Votre navigateur ne supporte pas les vidéos HTML5.
+//           </video>
+//         </li>`
+//     )
+//     .join('');
 
-  const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Liste des Vidéos</title>
-    </head>
-    <body>
-      <h1>Liste des Vidéos Disponibles</h1>
-      <ul>
-        ${videoLinks}
-      </ul>
-    </body>
-    </html>
-  `;
-  res.send(html);
-});
+//   const html = `
+//     <!DOCTYPE html>
+//     <html>
+//     <head>
+//       <title>Liste des Vidéos</title>
+//     </head>
+//     <body>
+//       <h1>Liste des Vidéos Disponibles</h1>
+//       <ul>
+//         ${videoLinks}
+//       </ul>
+//     </body>
+//     </html>
+//   `;
+//   res.send(html);
+// });
 
-// Liste des audios
-app.get('/audio', (req, res) => {
-  const audioLinks = filesDataAudio
-    .map(
-      (audio) =>
-        `<li>
-          <audio controls>
-            <source src="/audio/${audio.name}" type="audio/mpeg">
-            Votre navigateur ne supporte pas les audios HTML5.
-          </audio>
-          <p>${audio.name}</p>
-        </li>`
-    )
-    .join('');
+// // Liste des audios
+// app.get('/audio', (req, res) => {
+//   const audioLinks = filesDataAudio
+//     .map(
+//       (audio) =>
+//         `<li>
+//           <audio controls>
+//             <source src="/audio/${audio.name}" type="audio/mpeg">
+//             Votre navigateur ne supporte pas les audios HTML5.
+//           </audio>
+//           <p>${audio.name}</p>
+//         </li>`
+//     )
+//     .join('');
 
-  const html = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Liste des Audios</title>
-    </head>
-    <body>
-      <h1>Liste des Audios Disponibles</h1>
-      <ul>
-        ${audioLinks}
-      </ul>
-    </body>
-    </html>
-  `;
-  res.send(html);
-});
+//   const html = `
+//     <!DOCTYPE html>
+//     <html>
+//     <head>
+//       <title>Liste des Audios</title>
+//     </head>
+//     <body>
+//       <h1>Liste des Audios Disponibles</h1>
+//       <ul>
+//         ${audioLinks}
+//       </ul>
+//     </body>
+//     </html>
+//   `;
+//   res.send(html);
+// });
 
 // Détails d'un fichier
 app.get('/files/:name', (req, res) => {
@@ -184,39 +184,39 @@ app.get('/images/:name', (req, res) => {
   }
 });
 
-// Détails d'une vidéo
-app.get('/video/:name', (req, res) => {
-  const videoName = req.params.name;
-  const video = filesDataVideo.find((v) => v.name === videoName);
+// // Détails d'une vidéo
+// app.get('/video/:name', (req, res) => {
+//   const videoName = req.params.name;
+//   const video = filesDataVideo.find((v) => v.name === videoName);
 
-  if (!video) {
-    return res.status(404).json({ error: 'Vidéo introuvable' });
-  }
+//   if (!video) {
+//     return res.status(404).json({ error: 'Vidéo introuvable' });
+//   }
 
-  const videoPath = path.resolve(__dirname, video.path);
-  if (fs.existsSync(videoPath)) {
-    res.sendFile(videoPath);
-  } else {
-    res.status(404).json({ error: "Le chemin de la vidéo n'existe pas" });
-  }
-});
+//   const videoPath = path.resolve(__dirname, video.path);
+//   if (fs.existsSync(videoPath)) {
+//     res.sendFile(videoPath);
+//   } else {
+//     res.status(404).json({ error: "Le chemin de la vidéo n'existe pas" });
+//   }
+// });
 
-// Détails d'un audio
-app.get('/audio/:name', (req, res) => {
-  const audioName = req.params.name;
-  const audio = filesDataAudio.find((a) => a.name === audioName);
+// // Détails d'un audio
+// app.get('/audio/:name', (req, res) => {
+//   const audioName = req.params.name;
+//   const audio = filesDataAudio.find((a) => a.name === audioName);
 
-  if (!audio) {
-    return res.status(404).json({ error: 'Audio introuvable' });
-  }
+//   if (!audio) {
+//     return res.status(404).json({ error: 'Audio introuvable' });
+//   }
 
-  const audioPath = path.resolve(__dirname, audio.path);
-  if (fs.existsSync(audioPath)) {
-    res.sendFile(audioPath);
-  } else {
-    res.status(404).json({ error: "Le chemin de l'audio n'existe pas" });
-  }
-});
+//   const audioPath = path.resolve(__dirname, audio.path);
+//   if (fs.existsSync(audioPath)) {
+//     res.sendFile(audioPath);
+//   } else {
+//     res.status(404).json({ error: "Le chemin de l'audio n'existe pas" });
+//   }
+// });
 
 // Démarrer le serveur
 app.listen(PORT, () => {
